@@ -1,36 +1,67 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "3.2.2"
-    id("io.spring.dependency-management") version "1.1.4"
-    kotlin("jvm") version "1.9.22"
-    kotlin("plugin.spring") version "1.9.22"
+    kotlin("jvm")
+    kotlin("plugin.spring")
+    id("org.springframework.boot")
+    id("io.spring.dependency-management")
+    /** lint 관리 **/
+    id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
+    /** 커버러지 관리 **/
+    id("org.jetbrains.kotlinx.kover") version "0.7.5"
 }
-
-group = "kr.co.title"
-version = "0.0.1-SNAPSHOT"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_21
 }
 
-repositories {
-    mavenCentral()
-}
 
-dependencies {
-    implementation("org.springframework.boot:spring-boot-starter")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-}
+val projectGroup: String by project
+val applicationVersion: String by project
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        freeCompilerArgs += "-Xjsr305=strict"
-        jvmTarget = "21"
+allprojects {
+    group = projectGroup
+    version = applicationVersion
+
+    repositories {
+        mavenCentral()
+    }
+
+    subprojects {
+        apply(plugin = "org.jetbrains.kotlin.jvm")
+        apply(plugin = "org.jetbrains.kotlin.plugin.spring")
+        apply(plugin = "org.springframework.boot")
+        apply(plugin = "io.spring.dependency-management")
+
+        dependencies {
+            implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+            implementation("org.jetbrains.kotlin:kotlin-reflect")
+            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
+            implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
+        }
+
+        tasks.getByName("bootJar") {
+                enabled = false
+        }
+
+        tasks.getByName("jar") {
+                enabled = true
+        }
+
+        tasks.withType<KotlinCompile> {
+            kotlinOptions {
+                freeCompilerArgs += "-Xjsr305=strict"
+                jvmTarget = "21"
+            }
+        }
+
+        tasks.withType<Test> {
+            useJUnitPlatform()
+        }
     }
 }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
-}
+
+
+
+
