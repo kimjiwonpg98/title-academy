@@ -38,6 +38,8 @@ spring:
         connection-timeout: 30000
         keepalive-time: 0
         auto-commit: true
+  jooq:
+    sql-dialect: mysql
 
 ---
 spring:

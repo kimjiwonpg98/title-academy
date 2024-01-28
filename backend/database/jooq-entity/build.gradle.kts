@@ -6,12 +6,9 @@ plugins {
 
 dependencies {
     implementation(project(":domain"))
-    api(project(":database:jooq-entity"))
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
     implementation("org.springframework.boot:spring-boot-starter-jooq")
-
-    runtimeOnly("com.mysql:mysql-connector-j")
 }
 
 /** Arg 에러 방지 **/
