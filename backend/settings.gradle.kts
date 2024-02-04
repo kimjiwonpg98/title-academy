@@ -1,10 +1,12 @@
 rootProject.name = "title-academy"
 
 include(
+    "bootstrap",
     "database",
     "database:database-mysql",
     "database:jooq-entity",
-    "domain"
+    "domain",
+    "api"
 )
 
 pluginManagement {
